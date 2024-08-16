@@ -4,7 +4,7 @@ use converters::*;
 mod converters;
 
 struct ParsedLine {
-    value: u32,
+    value: f32,
     from: char,
     target: char,
 }
@@ -92,7 +92,7 @@ fn parse(input: &String) -> Result<ParsedLine, &str> {
     let (value, from) = first_arg.split_at(first_arg.len() - 1);
 
     // Convert value to u32
-    let value = match value.iter().collect::<String>().parse::<u32>() {
+    let value = match value.iter().collect::<String>().parse::<f32>() {
         Ok(val) => val,
         Err(_) => {
             return Err("Error while converting value to digit.");
