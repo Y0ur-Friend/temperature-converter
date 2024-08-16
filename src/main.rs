@@ -91,7 +91,7 @@ fn parse(input: &String) -> Result<ParsedLine, &str> {
     // All chars must be numeric exсept last one
     let (value, from) = first_arg.split_at(first_arg.len() - 1);
 
-    // Conver value to u32
+    // Convert value to u32
     let value = match value.iter().collect::<String>().parse::<u32>() {
         Ok(val) => val,
         Err(_) => {
