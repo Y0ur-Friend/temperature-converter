@@ -46,7 +46,7 @@ fn main() {
             Ok(_) => (),
             Err(err) => {
                 eprintln!("Error while reading input: {}", err);
-                return;
+                continue;
             }
         };
 
@@ -54,7 +54,7 @@ fn main() {
             Ok(val) => val,
             Err(err) => {
                 eprintln!("Parsing error: {}", err);
-                return;
+                continue;
             }
         };
 
@@ -66,7 +66,7 @@ fn main() {
             Ok(val) => val,
             Err(err) => {
                 eprintln!("Matching error: {}", err);
-                return;
+                continue;
             }
         };
 
