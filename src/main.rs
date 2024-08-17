@@ -15,7 +15,7 @@ fn main() {
     let mut buf = String::new();
 
     loop {
-        // Wait for use input
+        // Wait for user input
         let _ = match io::stdin().read_line(&mut buf) {
             Ok(_) => (),
             Err(err) => {
