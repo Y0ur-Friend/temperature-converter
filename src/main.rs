@@ -35,7 +35,8 @@ fn main() {
         return;
     }
 
-    println!("Easy to use temperature converter.\nExample: '10C to F', '300K to C'.");
+    println!("Easy to use temperature converter. Example: '10C to F', '300K to C'.");
+    println!("CLI mode is supported. Example: temperature-converter.exe '500K to C'");
 
     let mut buf = String::new();
 
