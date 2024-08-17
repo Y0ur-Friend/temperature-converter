@@ -1,4 +1,4 @@
-use std::io;
+use std::{ env, io };
 use converters::*;
 
 mod converters;
@@ -10,6 +10,31 @@ struct ParsedLine {
 }
 
 fn main() {
+    let args = env::args().collect::<Vec<String>>();
+
+    // If arguments are passed to programm execute it in CLI mode
+    if args.len() > 1 {
+        let parsed_line = match parse(&args[1]) {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Parsing error: {}", err);
+                return;
+            }
+        };
+
+        let result = match convert(&parsed_line) {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Matching error: {}", err);
+                return;
+            }
+        };
+
+        println!("{}", result);
+
+        return;
+    }
+
     println!("Easy to use temperature converter.\nExample: '10C to F', '300K to C'.");
 
     let mut buf = String::new();
@@ -36,32 +61,10 @@ fn main() {
         buf = String::new();
 
         // Calculate to target type
-        let result = match parsed_line.from {
-            'C' =>
-                match parsed_line.target {
-                    'F' => celsius::to_fahrenheit(parsed_line.value),
-                    'K' => celsius::to_kelvins(parsed_line.value),
-                    _ => {
-                        return;
-                    }
-                }
-            'F' =>
-                match parsed_line.target {
-                    'C' => fahrenheit::to_celsius(parsed_line.value),
-                    'K' => fahrenheit::to_kelvins(parsed_line.value),
-                    _ => {
-                        return;
-                    }
-                }
-            'K' =>
-                match parsed_line.target {
-                    'C' => kelvins::to_celsius(parsed_line.value),
-                    'F' => kelvins::to_fahrenheit(parsed_line.value),
-                    _ => {
-                        return;
-                    }
-                }
-            _ => {
+        let result = match convert(&parsed_line) {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Matching error: {}", err);
                 return;
             }
         };
@@ -119,4 +122,38 @@ fn parse(input: &String) -> Result<ParsedLine, &str> {
     }
 
     Ok(ParsedLine { value, from, target })
+}
+
+fn convert(parsed_line: &ParsedLine) -> Result<f32, &str> {
+    let result = match parsed_line.from {
+        'C' =>
+            match parsed_line.target {
+                'F' => celsius::to_fahrenheit(parsed_line.value),
+                'K' => celsius::to_kelvins(parsed_line.value),
+                _ => {
+                    return Err("Error while matching converter type");
+                }
+            }
+        'F' =>
+            match parsed_line.target {
+                'C' => fahrenheit::to_celsius(parsed_line.value),
+                'K' => fahrenheit::to_kelvins(parsed_line.value),
+                _ => {
+                    return Err("Error while matching converter type");
+                }
+            }
+        'K' =>
+            match parsed_line.target {
+                'C' => kelvins::to_celsius(parsed_line.value),
+                'F' => kelvins::to_fahrenheit(parsed_line.value),
+                _ => {
+                    return Err("Error while matching converter type");
+                }
+            }
+        _ => {
+            return Err("Error while matching converter type");
+        }
+    };
+
+    Ok(result)
 }
